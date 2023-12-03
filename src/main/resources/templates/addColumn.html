@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Add Table</title>
+  <script>
+    function showAdditionalFields() {
+      var selectedType = document.getElementById("columnType").value;
+      var additionalFields = document.getElementById("additionalFields");
+
+      // Reset the display property for all additional fields
+      additionalFields.querySelectorAll(".additional-field").forEach(function(field) {
+        if (selectedType!=="MONEY_INVL") {
+          field.style.display = "none";
+        }
+        else {
+          field.style.display = "block";
+        }
+      });
+
+      // Show the additional field corresponding to the selected type
+      // var selectedField = document.getElementById(selectedType + "Field");
+      // if (selectedField) {
+      //   selectedField.style.display = "block";
+      // }
+    }
+  </script>
+</head>
+<body>
+<h1>Add Table</h1>
+
+<form th:action="@{/addColumn}" method="post">
+  <label for="columnName">Column Name:</label>
+  <input type="text" id="columnName" name="name" required />
+  <select class="form-select" id="columnType" name="columnType" onchange="showAdditionalFields()" required>
+    <option value="" selected>Column Type:</option>
+    <option th:each="el : ${types}" th:text="${el}"></option>
+  </select>
+
+  <!-- Additional input fields for specific column types -->
+  <div id="additionalFields">
+    <!-- Example for a specific type (you can add more as needed) -->
+    <div id="minField" class="additional-field" style="display: none">
+      <label for="min">Min value:</label>
+      <input type="text" id="min" name="min" value=""/>
+    </div>
+    <div id="maxField" class="additional-field" style="display: none">
+      <label for="max">Max value:</label>
+      <input type="text" id="max" name="max" value=""/>
+    </div>
+  </div>
+  <button type="submit">Create Column</button>
+  <input type="hidden" name="tableIndex" th:value="${tableIndex}" />
+</form>
+
+</body>
+</html>
